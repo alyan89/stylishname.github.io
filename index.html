@@ -104,6 +104,7 @@
     nav a {
       color: black;
       text-decoration: none;
+      cursor: pointer;
     }
     h2 {
       margin-top: 30px;
@@ -189,25 +190,58 @@
 
 <div id="mainContent">
   <nav>
-    <a href="#">Home</a>
-    <a href="#">About</a>
-    <a href="#">Privacy</a>
-    <a href="#">Contact</a>
+    <a onclick="showPage('homePage')">Home</a>
+    <a onclick="showPage('aboutPage')">About</a>
+    <a onclick="showPage('privacyPage')">Privacy</a>
+    <a onclick="showPage('contactPage')">Contact</a>
   </nav>
 
-  <h2>Auto PUBG Stylish Names</h2>
-  <p>Start typing & choose your style ✨</p>
+  <div id="pages">
+    <section id="homePage">
+      <h2>Auto PUBG Stylish Names</h2>
+      <p>Start typing & choose your style ✨</p>
+      <div id="inputArea">
+        <input type="text" id="userInput" placeholder="Enter your name">
+        <button id="engBtn">English Names</button>
+        <button id="urBtn">Urdu Names</button>
+      </div>
+      <div id="suggestions"></div>
+      <button id="moreBtn">Load More</button>
+      <div id="developer">👑 DEVELOPER: ALYAN SAFDAR 👑</div>
+    </section>
 
-  <div id="inputArea">
-    <input type="text" id="userInput" placeholder="Enter your name">
-    <button id="engBtn">English Names</button>
-    <button id="urBtn">Urdu Names</button>
+    <section id="aboutPage" style="display:none;">
+      <h2>About</h2>
+      <p>
+        Welcome to Crystal PUBG Stylish Name Generator! 🎮✨<br><br>
+        Our tool helps you create epic, stylish, and unique PUBG names in English and Urdu. 
+        Stand out in the battlegrounds with cool, customized names filled with special characters, 
+        fancy fonts, and emojis! 
+        Whether you're a fierce warrior or a stealthy assassin, you'll find the perfect name here.
+      </p>
+    </section>
+
+    <section id="privacyPage" style="display:none;">
+      <h2>Privacy Policy</h2>
+      <p>
+        We respect your privacy. 🔒<br><br>
+        - This app does not collect, store, or share any personal information.<br>
+        - Any name you type is processed locally in your browser.<br>
+        - No data is sent to any servers.<br>
+        - We do not use cookies or trackers.<br><br>
+        Your creative freedom and privacy are our priorities!
+      </p>
+    </section>
+
+    <section id="contactPage" style="display:none;">
+      <h2>Contact Us</h2>
+      <p>
+        Have questions, ideas, or feedback? Feel free to reach out! 💬<br><br>
+        📧 Email: <a href="mailto:alyansafdar0@gmail.com" style="color:#00fff7;">alyansafdar0@gmail.com</a><br>
+        📱 Instagram: <a href="https://instagram.com/yourhandle" target="_blank" style="color:#00fff7;">@yourhandle</a>
+      </p>
+    </section>
   </div>
-
-  <div id="suggestions"></div>
-  <button id="moreBtn">Load More</button>
-
-  <div id="developer">👑 DEVELOPER: ALYAN SAFDAR 👑</div>
 </div>
 
 <script>
@@ -230,6 +264,7 @@
       });
     }
   }
+
   function animateParticles() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (let p of particlesArray) {
@@ -243,6 +278,12 @@
       if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
     }
     requestAnimationFrame(animateParticles);
+  }
+
+  function showPage(pageId) {
+    const sections = document.querySelectorAll('#pages section');
+    sections.forEach(section => section.style.display = 'none');
+    document.getElementById(pageId).style.display = 'block';
   }
 
   const prefixes = ['☆彡','➳','༒','𓆩','꧁༒☬','✧･ﾟ:*','༼','(っ◔◡◔)っ ♥'];
