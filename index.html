@@ -2,16 +2,94 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>PUBG Stylish Names</title>
+  <title>Crystal PUBG Names + Particles</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
-    body {
-      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-      color: #00fff7;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body, html {
+      height: 100%;
+      overflow-x: hidden;
+      background: #0f0c29;
       font-family: 'Orbitron', sans-serif;
-      margin: 0;
-      padding: 0;
+      color: #00fff7;
       text-align: center;
+      position: relative;
+    }
+    #particleCanvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+    #splash {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 9999;
+      overflow: hidden;
+      transition: all 1s ease;
+    }
+    #splash.fadeOut {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    #splash h1 {
+      font-size: 6em;
+      color: #0ff;
+      animation: sparkle 2s infinite alternate;
+      letter-spacing: 5px;
+      text-shadow: 0 0 20px #0ff, 0 0 40px #0ff, 0 0 60px #f0f, 0 0 80px #0ff;
+    }
+    @keyframes sparkle {
+      0% { text-shadow: 0 0 10px #0ff, 0 0 20px #f0f, 0 0 30px #ff0; }
+      100% { text-shadow: 0 0 30px #f0f, 0 0 50px #0ff, 0 0 70px #ff0; }
+    }
+    .bubble {
+      position: absolute;
+      bottom: -100px;
+      background: radial-gradient(circle, #0ff 0%, #00f 80%);
+      border-radius: 50%;
+      opacity: 0.6;
+      animation: rise 10s infinite linear;
+    }
+    @keyframes rise {
+      from { transform: translateY(0) scale(1); }
+      to { transform: translateY(-120vh) scale(1.5); }
+    }
+    #loadingBar {
+      width: 80%;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 5px;
+      margin-top: 30px;
+      overflow: hidden;
+      position: relative;
+    }
+    #progress {
+      height: 100%;
+      background: linear-gradient(90deg, #0ff, #f0f, #ff0);
+      width: 0%;
+      border-radius: 5px;
+      animation: loadProgress 3s forwards;
+    }
+    @keyframes loadProgress {
+      from { width: 0%; }
+      to { width: 100%; }
+    }
+    #mainContent {
+      display: none;
+      animation: fadeIn 2s ease forwards;
+      position: relative;
+      z-index: 1;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
     nav {
       background: #00fff7;
@@ -20,58 +98,229 @@
       justify-content: center;
       gap: 20px;
       font-weight: bold;
-      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
     }
     nav a {
       color: black;
       text-decoration: none;
     }
-    h1 {
-      margin-top: 40px;
+    h2 {
+      margin-top: 30px;
       font-size: 3em;
-      text-shadow: 0 0 15px #00fff7, 0 0 25px #00fff7;
+      text-shadow: 0 0 10px #00fff7;
+    }
+    #inputArea {
+      margin: 20px;
+    }
+    input[type="text"] {
+      padding: 10px;
+      width: 300px;
+      font-size: 1.2em;
+      border-radius: 8px;
+      border: 2px solid #00fff7;
+      background: #1c1c3c;
+      color: #00fff7;
+    }
+    button {
+      margin: 8px;
+      padding: 10px 20px;
+      font-size: 1.1em;
+      border: none;
+      border-radius: 8px;
+      background: #00fff7;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #00c7d7;
+    }
+    #suggestions {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px auto;
+      max-width: 900px;
+      padding: 10px;
+    }
+    .suggestion-item {
+      background: rgba(0, 255, 247, 0.1);
+      border: 1px solid #00fff7;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+    .suggestion-item:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #00fff7;
     }
     #developer {
-      position: fixed;
-      bottom: 20px;
-      white-space: nowrap;
+      margin-top: 40px;
+      padding: 20px;
+      border: 4px solid;
+      border-image: linear-gradient(45deg, #f0f, #0ff, #0f0, #ff0, #f0f) 1;
+      border-radius: 20px;
       font-size: 1.5em;
-      font-weight: bold;
-      padding: 10px 20px;
-      border: 2px solid transparent;
-      border-radius: 12px;
-      color: #ffffff;
-      background: rgba(0, 0, 0, 0.3);
-      animation: slideLeft 12s linear infinite, glowingBorder 5s linear infinite;
-      text-shadow: 0 0 5px #fff, 0 0 10px #0ff, 0 0 15px #0ff;
+      animation: moveRight 15s linear infinite, neonGlow 2s infinite alternate;
+      display: inline-block;
     }
-    @keyframes slideLeft {
-      0% { right: -400px; }
-      50% { right: 50%; transform: translateX(50%); }
-      100% { right: 100vw; }
+    @keyframes moveRight {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100vw); }
     }
-    @keyframes glowingBorder {
-      0% { border-color: #ff00ff; box-shadow: 0 0 10px #ff00ff; }
-      25% { border-color: #00ffff; box-shadow: 0 0 10px #00ffff; }
-      50% { border-color: #00ff00; box-shadow: 0 0 10px #00ff00; }
-      75% { border-color: #ff0000; box-shadow: 0 0 10px #ff0000; }
-      100% { border-color: #ff00ff; box-shadow: 0 0 10px #ff00ff; }
+    @keyframes neonGlow {
+      from { box-shadow: 0 0 10px #0ff, 0 0 20px #f0f; }
+      to { box-shadow: 0 0 20px #ff0, 0 0 30px #0ff; }
     }
   </style>
 </head>
 <body>
 
-<nav>
-  <a href="index.html">Home</a>
-  <a href="about.html">About Us</a>
-  <a href="privacy.html">Privacy Policy</a>
-  <a href="contact.html">Contact Us</a>
-</nav>
+<canvas id="particleCanvas"></canvas>
 
-<h1>PUBG Stylish Names</h1>
-<p>Generate stylish, cool, funny, and dangerous names for PUBG! ✨</p>
+<div id="splash">
+  <h1>✨ ALYAN SAFDAR ✨</h1>
+  <div id="loadingBar"><div id="progress"></div></div>
+</div>
 
-<div id="developer"><b>DEVELOPER: ALYAN SAFDAR</b></div>
+<div id="mainContent">
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">About</a>
+    <a href="#">Privacy</a>
+    <a href="#">Contact</a>
+  </nav>
+
+  <h2>Auto PUBG Stylish Names</h2>
+  <p>Start typing & choose your style ✨</p>
+
+  <div id="inputArea">
+    <input type="text" id="userInput" placeholder="Enter your name">
+    <button id="engBtn">English Names</button>
+    <button id="urBtn">Urdu Names</button>
+  </div>
+
+  <div id="suggestions"></div>
+  <button id="moreBtn">Load More</button>
+
+  <div id="developer">👑 DEVELOPER: ALYAN SAFDAR 👑</div>
+</div>
+
+<script>
+  const canvas = document.getElementById('particleCanvas');
+  const ctx = canvas.getContext('2d');
+  let particlesArray = [];
+
+  function initParticles() {
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+    particlesArray = [];
+    for (let i = 0; i < 100; i++) {
+      particlesArray.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 3 + 1,
+        speedX: Math.random() * 1 - 0.5,
+        speedY: Math.random() * 1 - 0.5,
+        color: `hsl(${Math.random()*360}, 100%, 50%)`
+      });
+    }
+  }
+  function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let p of particlesArray) {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.fill();
+      p.x += p.speedX;
+      p.y += p.speedY;
+      if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+    }
+    requestAnimationFrame(animateParticles);
+  }
+
+  const prefixes = ['☆彡','➳','༒','𓆩','꧁༒☬','✧･ﾟ:*','༼','(っ◔◡◔)っ ♥'];
+  const englishBases = ['Dragon','Killer','Shadow','Ghost','King','Sniper','Assassin','Warrior','Rider','Hunter'];
+  const urduBases = ['شہزادہ','غازی','بجلی','اژدہا','مولا جٹ','تھگ','جنگجو','مہرہ','شمشیر','کوبرا'];
+  const emojis = ['🔥','💀','👑','⚡','🐉','💥','☠️','✨'];
+
+  let mode = 'en';
+  let suggestions = [];
+  let suggestionIndex = 0;
+  const chunkSize = 9;
+
+  document.getElementById('engBtn').onclick = () => { mode = 'en'; generateSuggestions(); };
+  document.getElementById('urBtn').onclick = () => { mode = 'ur'; generateSuggestions(); };
+  document.getElementById('userInput').oninput = generateSuggestions;
+  document.getElementById('moreBtn').onclick = displayNext;
+
+  function generateSuggestions() {
+    suggestions = [];
+    suggestionIndex = 0;
+    const inputText = document.getElementById('userInput').value.trim();
+    const baseList = mode === 'en' ? englishBases : urduBases;
+    for (let i = 0; i < 200; i++) {
+      const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+      const base = baseList[Math.floor(Math.random() * baseList.length)];
+      const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+      const wrap = prefixes[Math.floor(Math.random() * prefixes.length)];
+      suggestions.push(`${prefix}${inputText || base}${emoji}${wrap}`);
+    }
+    document.getElementById('suggestions').innerHTML = '';
+    displayNext();
+  }
+
+  function displayNext() {
+    const container = document.getElementById('suggestions');
+    for (let i = 0; i < chunkSize && suggestionIndex < suggestions.length; i++, suggestionIndex++) {
+      const div = document.createElement('div');
+      div.className = 'suggestion-item';
+      div.innerText = suggestions[suggestionIndex];
+      div.onclick = () => {
+        navigator.clipboard.writeText(div.innerText);
+        alert('Copied: ' + div.innerText);
+      };
+      container.appendChild(div);
+    }
+    if (suggestionIndex >= suggestions.length) {
+      document.getElementById('moreBtn').style.display = 'none';
+    } else {
+      document.getElementById('moreBtn').style.display = 'block';
+    }
+  }
+
+  function createBubbles() {
+    const splash = document.getElementById('splash');
+    for (let i = 0; i < 30; i++) {
+      const bubble = document.createElement('div');
+      bubble.classList.add('bubble');
+      bubble.style.width = bubble.style.height = `${Math.random() * 40 + 20}px`;
+      bubble.style.left = `${Math.random() * 100}%`;
+      bubble.style.animationDuration = `${5 + Math.random() * 5}s`;
+      splash.appendChild(bubble);
+    }
+  }
+
+  window.onload = function() {
+    initParticles();
+    animateParticles();
+    createBubbles();
+    setTimeout(() => {
+      document.getElementById('splash').classList.add('fadeOut');
+      setTimeout(() => {
+        document.getElementById('splash').style.display = 'none';
+        document.getElementById('mainContent').style.display = 'block';
+      }, 1000);
+    }, 3000);
+    generateSuggestions();
+  }
+</script>
 
 </body>
 </html>
